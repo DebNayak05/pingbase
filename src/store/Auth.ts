@@ -4,10 +4,7 @@ import { persist } from "zustand/middleware";
 
 import { AppwriteException, ID, Models } from "appwrite";
 import { account } from "@/models/client/config";
-
-export interface UserPrefs {
-  reputation: number;
-}
+import { UserPrefs } from "@/types/types";
 
 interface IAuthStore {
   session: Models.Session | null;
@@ -19,12 +16,12 @@ interface IAuthStore {
   verifySession(): Promise<void>;
   login(
     email: string,
-    password: string
+    password: string,
   ): Promise<{ success: boolean; error?: AppwriteException | null }>;
   createAccount(
     username: string,
     email: string,
-    password: string
+    password: string,
   ): Promise<{ success: boolean; error?: AppwriteException | null }>;
   logout(): Promise<void>;
 }
@@ -58,7 +55,7 @@ export const useAuthStore = create<IAuthStore>()(
         try {
           const session = await account.createEmailPasswordSession(
             email,
-            password
+            password,
           );
           const user = await account.get<UserPrefs>();
           const jwtResponse = await account.createJWT();
@@ -108,6 +105,6 @@ export const useAuthStore = create<IAuthStore>()(
           if (!error) state?.setHydrated();
         };
       },
-    }
-  )
+    },
+  ),
 );

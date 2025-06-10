@@ -17,7 +17,7 @@ export default async function createAnswerCollection() {
       answerCollection,
       "content",
       10000,
-      true
+      true,
     ),
     databases.createStringAttribute(db, answerCollection, "authorId", 50, true),
     databases.createStringAttribute(
@@ -25,8 +25,9 @@ export default async function createAnswerCollection() {
       answerCollection,
       "questionId",
       50,
-      true
+      true,
     ),
+    databases.createIntegerAttribute(db, answerCollection, "karma", true),
   ]);
   console.log("Answer attributes created");
 }

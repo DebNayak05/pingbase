@@ -25,10 +25,10 @@ export default async function getOrCreateStorage() {
         ["jpg", "png", "gif", "jpeg", "webp", "heic"], // allowedFileExtensions (optional)
         undefined, // compression (optional)
         undefined, // encryption (optional)
-        undefined // antivirus (optional)
+        undefined, // antivirus (optional)
       );
     } catch (error) {
-        console.log("Error creating storage :( : ", error);
+      console.log("Error creating storage :( : ", error);
     }
   }
 }

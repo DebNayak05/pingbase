@@ -53,7 +53,7 @@ export default function Register() {
     const response = await createAccount(
       user.firstname + user.lastname + randomNumber,
       user.email,
-      user.password
+      user.password,
     );
     if (response.error) {
       setError(response.error.message);

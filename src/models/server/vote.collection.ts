@@ -19,7 +19,7 @@ export default async function createVoteCollection() {
       ["question", "answer"],
       true
     ),
-    databases.createStringAttribute(db, voteCollection, "typeId", 50, true),
+    databases.createStringAttribute(db, voteCollection, "typeId", 50, true), //type id is id of the unique question/answer id whose content is being judged
     databases.createStringAttribute(db, voteCollection, "votedById", 50, true),
     databases.createEnumAttribute(
       db,

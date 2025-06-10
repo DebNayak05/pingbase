@@ -17,23 +17,24 @@ export default async function createCommentCollection() {
       commentCollection,
       "authorId",
       50,
-      true
+      true,
     ),
     databases.createStringAttribute(
       db,
       commentCollection,
       "content",
       10000,
-      true
+      true,
     ),
     databases.createEnumAttribute(
       db,
       commentCollection,
       "type",
       ["question", "answer"],
-      true
+      true,
     ),
     databases.createStringAttribute(db, commentCollection, "typeId", 50, true),
+    databases.createIntegerAttribute(db, commentCollection, "karma", true),
   ]);
   console.log("Comment attributes created");
 }

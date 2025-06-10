@@ -60,7 +60,7 @@ export default async function createQuestionCollection() {
       questionCollection, // collectionId
       "title", // key
       100, // size
-      true // required
+      true, // required
     ),
     databases.createStringAttribute(
       db, // databaseId
@@ -70,29 +70,30 @@ export default async function createQuestionCollection() {
       true, // required
       undefined, // default (optional)
       true, // array (optional)
-      false // encrypt (optional)
+      false, // encrypt (optional)
     ),
     databases.createStringAttribute(
       db,
       questionCollection,
       "content",
       10000,
-      true
+      true,
     ),
     databases.createStringAttribute(
       db,
       questionCollection,
       "authorId",
       50,
-      true
+      true,
     ),
     databases.createStringAttribute(
       db,
       questionCollection,
       "attachmentId",
       50,
-      false
+      false,
     ),
+    databases.createIntegerAttribute(db, questionCollection, "karma", true),
   ]);
 
   console.log("Question attributes created!!");
@@ -100,7 +101,6 @@ export default async function createQuestionCollection() {
   await new Promise((resolve) => setTimeout(resolve, 3000)); //stopped execution for a few second to ensure that question collection is created properly before creating indexes.
   //i don't know why await didn't handle it properly but there is a bug ig
   //https://chatgpt.com/share/6842d0ab-6b38-8005-aec3-a4f8dd9b7c5e
-
 
   //creating indexes
   /**
@@ -121,7 +121,7 @@ export default async function createQuestionCollection() {
       "title", // key
       IndexType.Fulltext, //type
       ["title"], // attributes -> taking title as the attribute
-      ["asc"] // orders (optional) ->asc means ascending order
+      ["asc"], // orders (optional) ->asc means ascending order
     ),
     databases.createIndex(
       db,
@@ -129,7 +129,7 @@ export default async function createQuestionCollection() {
       "content",
       IndexType.Fulltext,
       ["content"],
-      ["asc"]
+      ["asc"],
     ),
   ]);
   console.log("Question indexes added successfully!!");
