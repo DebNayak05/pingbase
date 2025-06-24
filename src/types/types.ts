@@ -22,3 +22,10 @@ export interface QuestionDocument extends Models.Document {
 export interface UserPrefs {
   reputation: number;
 }
+export interface UserDetails {
+  name : string,
+  email : string,
+  created : Date,
+  lastOnline : Date,
+  karma : Number
+}
