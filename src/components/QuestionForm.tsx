@@ -1,6 +1,4 @@
 "use client";
-import { handleApiErrors } from "@/lib/errors.server";
-import Link from "next/link";
 import { ShimmerButton } from "./magicui/shimmer-button";
 import {
   db,
@@ -13,9 +11,8 @@ import { databases, storage } from "@/models/client/config";
 import { useAuthStore } from "@/store/Auth";
 import { QuestionDocument } from "@/types/types";
 import MDEditor from "@uiw/react-md-editor";
-import { useRouter } from "next/navigation";
 import { AppwriteException, ID } from "node-appwrite";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { useRef } from "react";
@@ -43,29 +40,33 @@ export default function QuestionForm({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const create = async () => {
-    var storageResponse = null;
-    if (formData.attachment) {
-      storageResponse = await storage.createFile(
-        questionAttachmentBucket,
-        ID.unique(),
-        formData.attachment
-      );
-    }
-    const response = await databases.createDocument(
-      db,
-      questionCollection,
-      ID.unique(),
-      {
-        title: formData.title,
-        authorId: formData.authorId,
-        tags: Array.from(formData.tags),
-        attachmentId: storageResponse ? storageResponse.$id : null,
-        content: formData.content,
-        karma: 0,
+    try {
+      var storageResponse = null;
+      if (formData.attachment) {
+        storageResponse = await storage.createFile(
+          questionAttachmentBucket,
+          ID.unique(),
+          formData.attachment
+        );
       }
-    );
-    toast.success("Question uploaded successfully!");
-    return response;
+      const response = await databases.createDocument(
+        db,
+        questionCollection,
+        ID.unique(),
+        {
+          title: formData.title,
+          authorId: formData.authorId,
+          tags: Array.from(formData.tags),
+          attachmentId: storageResponse ? storageResponse.$id : null,
+          content: formData.content,
+          karma: 0,
+        }
+      );
+      toast.success("Question uploaded successfully!");
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const update = async () => {
