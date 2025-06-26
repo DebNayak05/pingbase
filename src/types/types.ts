@@ -9,7 +9,7 @@ export interface AnswerDocument extends Models.Document {
     content : string,
     authorId : string, 
     questionId : string, 
-    karma : Number
+    karma : number
 }
 export interface QuestionDocument extends Models.Document {
     title : string,
@@ -17,7 +17,7 @@ export interface QuestionDocument extends Models.Document {
     content : string, 
     authorId : string,
     attachmentId : string,
-    karma : Number
+    karma : number
 }
 export interface UserPrefs {
   reputation: number;
@@ -27,5 +27,5 @@ export interface UserDetails {
   email : string,
   created : Date,
   lastOnline : Date,
-  karma : Number
+  karma : number
 }

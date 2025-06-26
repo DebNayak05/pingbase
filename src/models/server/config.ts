@@ -1,6 +1,6 @@
 import { Client, Databases, Avatars, Storage, Users } from "node-appwrite";
 
-let client = new Client();
+const client = new Client();
 
 client
   .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!) // Your API Endpoint

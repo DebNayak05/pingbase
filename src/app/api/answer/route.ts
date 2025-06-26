@@ -1,9 +1,8 @@
 import { handleApiErrors } from "@/lib/errors.server";
 import { answerCollection, db } from "@/models/name";
-import { databases, users } from "@/models/server/config";
+import { databases } from "@/models/server/config";
 import { NextRequest, NextResponse } from "next/server";
 import { ID } from "node-appwrite";
-import { UserPrefs } from "@/types/types";
 
 export async function POST(request: NextRequest) {
   try {

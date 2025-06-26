@@ -4,13 +4,13 @@ import {
   CardAction,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import { storage } from "@/models/client/config";
+import Image from "next/image";
 import Markdown from "react-markdown";
-import remarkGfm from "remark-gfm";
+// import remarkGfm from "remark-gfm";
 import { questionAttachmentBucket } from "@/models/name";
 import Link from "next/link";
 
@@ -41,7 +41,7 @@ export default function QuestionCard({
           </div>
           <CardAction>
             {questionData.attachmentId ? (
-              <img
+              <Image
                 className="h-24 w-24 object-cover"
                 src={storage.getFileView(
                   questionAttachmentBucket,

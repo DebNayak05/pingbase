@@ -10,9 +10,8 @@ import {
 } from "@/components/ui/card";
 
 import { Menubar, MenubarMenu, MenubarTrigger } from "@/components/ui/menubar";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+// import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 // import { Badge } from "@/components/ui/badge";
-import { Mail, Clock } from "lucide-react";
 import { useParams } from "next/navigation";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -38,6 +37,7 @@ export default function UserProfile({
         });
         setUser(response.data.user);
       } catch (error) {
+        console.log(error);
         alert("Something went wrong");
       } finally {
         setLoading(false);

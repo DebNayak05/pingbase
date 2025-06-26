@@ -1,4 +1,4 @@
-import QuestionForm from "@/components/QuestionForm"
+import QuestionForm from "@/components/questionComponents/QuestionForm"
 export default function AskQuestion () {
     return (
         <div>

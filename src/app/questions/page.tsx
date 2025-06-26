@@ -1,4 +1,4 @@
-import Questions from "@/components/AllQuestions";
+import Questions from "@/components/questionComponents/AllQuestions";
 
 export default async function QuestionsPage({
   searchParams,

@@ -1,5 +1,5 @@
 "use client";
-import { ShimmerButton } from "./magicui/shimmer-button";
+import { ShimmerButton } from "../magicui/shimmer-button";
 import {
   db,
   questionAttachmentBucket,
@@ -13,8 +13,8 @@ import { QuestionDocument } from "@/types/types";
 import MDEditor from "@uiw/react-md-editor";
 import { AppwriteException, ID } from "node-appwrite";
 import { useEffect, useState } from "react";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
 import { useRef } from "react";
 export default function QuestionForm({
   question,
@@ -29,7 +29,7 @@ export default function QuestionForm({
     content: question ? question.content : "",
     authorId: user?.$id,
     questionId: question ? question.$id : "",
-    tags: new Set((question ? question.tags : []) as String[]),
+    tags: new Set((question ? question.tags : []) as string[]),
     attachment: null as File | null,
   });
   useEffect(() => {
@@ -41,7 +41,7 @@ export default function QuestionForm({
   const [error, setError] = useState("");
   const create = async () => {
     try {
-      var storageResponse = null;
+      let storageResponse = null;
       if (formData.attachment) {
         storageResponse = await storage.createFile(
           questionAttachmentBucket,
@@ -73,7 +73,7 @@ export default function QuestionForm({
     if (!question) {
       return "please provide previous question";
     }
-    var storageResponse = null;
+    let storageResponse = null;
     if (formData.attachment) {
       if (question.attachmentId) {
         await storage.deleteFile(
@@ -123,7 +123,7 @@ export default function QuestionForm({
         title: "",
         content: "",
         questionId: "",
-        tags: new Set([] as String[]),
+        tags: new Set([] as string[]),
         attachment: null,
       });
       if (fileInputRef.current) {
@@ -150,7 +150,7 @@ export default function QuestionForm({
           shimmerSize="0.2em"
           shimmerDuration="2.5s"
           background="#6d3596"
-          onClick={(e) => onSubmit()}
+          onClick={() => onSubmit()}
         >
           <span className="whitespace-pre-wrap text-center text-sm font-medium leading-none tracking-tight text-white dark:from-white dark:to-slate-900/10 lg:text-lg">
             Publish

@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
       Query.equal("typeId", typeId),
       Query.equal("votedById", votedById),
     ])) as Models.DocumentList<VoteDocument>;
-    const isQuestion: Boolean = type === "question";
+    const isQuestion: boolean = type === "question";
     /**
          * Structure of a response object
          *  POST /api/vote 500 in 4661ms
@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
         voteCollection,
         response.documents[0].$id
       );
-      const wasUpvotedBefore: Boolean =
+      const wasUpvotedBefore: boolean =
         response.documents[0].voteStatus === "upvoted";
       const questionOrAnswer = (await databases.getDocument(
         db,
@@ -82,7 +82,7 @@ export async function POST(request: NextRequest) {
       isQuestion ? questionCollection : answerCollection,
       typeId
     )) as AnswerDocument | QuestionDocument;
-    const curUpvoted: Boolean = voteStatus === "upvoted";
+    const curUpvoted: boolean = voteStatus === "upvoted";
     await databases.updateDocument(
       db,
       isQuestion ? questionCollection : answerCollection,

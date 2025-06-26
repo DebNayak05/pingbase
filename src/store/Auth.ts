@@ -8,7 +8,7 @@ import { UserPrefs } from "@/types/types";
 
 interface IAuthStore {
   session: Models.Session | null;
-  jwt: String | null;
+  jwt: string | null;
   user: Models.User<UserPrefs> | null;
   hydrated: boolean;
 
@@ -63,7 +63,7 @@ export const useAuthStore = create<IAuthStore>()(
           if (!user.prefs?.reputation) {
             await account.updatePrefs({ reputation: 0 });
           }
-          set((state) => ({
+          set(() => ({
             session: session,
             user: user,
             jwt: jwt,
@@ -91,7 +91,7 @@ export const useAuthStore = create<IAuthStore>()(
       },
       async logout() {
         await account.deleteSession("current");
-        set((state) => ({
+        set(() => ({
           session: null,
           jwt: null,
           user: null,
