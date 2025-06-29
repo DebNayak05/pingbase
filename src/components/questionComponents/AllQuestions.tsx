@@ -24,7 +24,7 @@ export default async function Questions({ page }: { page: number }) {
     questionCollection,
     [Query.offset(offset), Query.limit(questionPerPage + 1)]
   );
-  const questions = response.documents.slice(0, -1);
+  const questions = response.documents.length > questionPerPage ? response.documents.slice(0, -1) : response.documents;
   const hasNextPage = response.documents.length > questionPerPage; //as i have queried for 5 elements, so if i get 5 elements, then next page must exist
   const hasPrevPage = page > 0;
 

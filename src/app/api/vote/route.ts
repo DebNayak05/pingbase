@@ -67,11 +67,9 @@ export async function POST(request: NextRequest) {
           karma: Number(questionOrAnswer.karma) + (wasUpvotedBefore ? -1 : 1),
         }
       );
-      console.log("hello");
       const authorPrefs = await users.getPrefs<UserPrefs>(
         questionOrAnswer.authorId
       );
-      console.log(authorPrefs);
       await users.updatePrefs(questionOrAnswer.authorId, {
         reputation:
           Number(authorPrefs.reputation) + (wasUpvotedBefore ? -1 : 1),

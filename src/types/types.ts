@@ -29,3 +29,9 @@ export interface UserDetails {
   lastOnline : Date,
   karma : number
 }
+export interface CommentDocument extends Models.Document {
+  authorId : string, 
+  content : string, 
+  type : "question" | "answer",
+  typeId : string
+}
