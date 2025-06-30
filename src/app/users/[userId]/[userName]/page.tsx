@@ -1,4 +1,4 @@
-export default function Answers(){
+export default function ProfileSummary(){
     /**
      * number of question asked wgera
      * */

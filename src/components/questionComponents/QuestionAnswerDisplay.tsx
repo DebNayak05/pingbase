@@ -17,6 +17,7 @@ import {
 import { storage } from "@/models/client/config";
 import Image from "next/image";
 import Markdown from "react-markdown";
+import Comment from "../answerComponents/comment";
 // import remarkGfm from "remark-gfm";
 import VoteButtons from "../commonComponents/VoteButtons";
 import {
@@ -30,8 +31,9 @@ import {
 import { databases, users } from "@/models/server/config";
 import getRelativeTime from "@/lib/convertDateToRelativeTime";
 import { Query } from "node-appwrite";
-import AnswerCard from "../answerComponents/answer";
+import AnswerCard from "../answerComponents/answerCard";
 import { MagicCard } from "../magicui/magic-card";
+import Answers from "../answerComponents/renderAnswers";
 
 export interface ModifiedCommentDocument extends CommentDocument {
   author: {
@@ -102,43 +104,158 @@ export default async function RenderQuestion({
       };
     })
   );
-  const modifiedAnswers: ModifiedAnsDoc[] = await Promise.all(
-    answerData.documents.map(async (value) => {
-      const [author, upvotes, downvotes, answerComments] = await Promise.all([
-        users.get<UserPrefs>(value.authorId),
-        databases.listDocuments<VoteDocument>(db, voteCollection, [
-          Query.equal("typeId", value.$id),
-          Query.equal("type", "question"), // probably should be "answer"
-          Query.equal("voteStatus", "upvoted"),
-          Query.limit(1),
-        ]),
-        databases.listDocuments<VoteDocument>(db, voteCollection, [
-          Query.equal("typeId", value.$id),
-          Query.equal("type", "question"), // probably should be "answer"
-          Query.equal("voteStatus", "downvoted"),
-          Query.limit(1),
-        ]),
-        databases.listDocuments<CommentDocument>(db, commentCollection, [
-          Query.equal("typeId", value.$id),
-          Query.equal("type", "answer"),
-          Query.orderAsc("$createdAt"),
-        ]),
-      ]);
+  // const modifiedAnswers: ModifiedAnsDoc[] = await Promise.all(
+  //   answerData.documents.map(async (value) => {
+  //     const [author, upvotes, downvotes, answerComments] = await Promise.all([
+  //       users.get<UserPrefs>(value.authorId),
+  //       databases.listDocuments<VoteDocument>(db, voteCollection, [
+  //         Query.equal("typeId", value.$id),
+  //         Query.equal("type", "question"), // probably should be "answer"
+  //         Query.equal("voteStatus", "upvoted"),
+  //         Query.limit(1),
+  //       ]),
+  //       databases.listDocuments<VoteDocument>(db, voteCollection, [
+  //         Query.equal("typeId", value.$id),
+  //         Query.equal("type", "question"), // probably should be "answer"
+  //         Query.equal("voteStatus", "downvoted"),
+  //         Query.limit(1),
+  //       ]),
+  //       databases.listDocuments<CommentDocument>(db, commentCollection, [
+  //         Query.equal("typeId", value.$id),
+  //         Query.equal("type", "answer"),
+  //         Query.orderAsc("$createdAt"),
+  //       ]),
+  //     ]);
 
-      const modifiedAnswerComments: ModifiedCommentDocument[] =
-        await Promise.all(
+  //     const modifiedAnswerComments: ModifiedCommentDocument[] =
+  //       await Promise.all(
+  //         answerComments.documents.map(async (comment) => {
+  //           const commentAuthor = await users.get<UserPrefs>(comment.authorId);
+  //           return {
+  //             ...comment,
+  //             author: {
+  //               $id: commentAuthor.$id,
+  //               name: commentAuthor.name,
+  //               reputation: commentAuthor.prefs.reputation,
+  //             },
+  //           };
+  //         })
+  //       );
+
+  //     return {
+  //       ...value,
+  //       author: {
+  //         $id: author.$id,
+  //         name: author.name,
+  //         reputation: author.prefs.reputation,
+  //       },
+  //       upvotes: upvotes.total,
+  //       downvotes: downvotes.total,
+  //       comments: modifiedAnswerComments,
+  //     };
+  //   })
+  // );
+
+  //GPT SOLUTION IDK WHY ABOVE CODE FAILS. BUT IF WRAPPING EVERYTHING INSIDE TRYCATCH IT WORKS
+  const modifiedAnswersRaw: (ModifiedAnsDoc | null)[] = await Promise.all(
+    answerData.documents.map(async (value) => {
+      let author, upvotes, downvotes, answerComments;
+
+      try {
+        author = await users.get<UserPrefs>(value.authorId);
+      } catch (err) {
+        console.error(`Failed to fetch author for answer ${value.$id}:`, err);
+        return null;
+      }
+
+      try {
+        upvotes = await databases.listDocuments<VoteDocument>(
+          db,
+          voteCollection,
+          [
+            Query.equal("typeId", value.$id),
+            Query.equal("type", "answer"),
+            Query.equal("voteStatus", "upvoted"),
+            Query.limit(1),
+          ]
+        );
+      } catch (err) {
+        console.error(`Failed to fetch upvotes for answer ${value.$id}:`, err);
+        upvotes = { total: 0, documents: [] };
+      }
+
+      try {
+        downvotes = await databases.listDocuments<VoteDocument>(
+          db,
+          voteCollection,
+          [
+            Query.equal("typeId", value.$id),
+            Query.equal("type", "answer"),
+            Query.equal("voteStatus", "downvoted"),
+            Query.limit(1),
+          ]
+        );
+      } catch (err) {
+        console.error(
+          `Failed to fetch downvotes for answer ${value.$id}:`,
+          err
+        );
+        downvotes = { total: 0, documents: [] };
+      }
+
+      try {
+        answerComments = await databases.listDocuments<CommentDocument>(
+          db,
+          commentCollection,
+          [
+            Query.equal("typeId", value.$id),
+            Query.equal("type", "answer"),
+            Query.orderAsc("$createdAt"),
+          ]
+        );
+      } catch (err) {
+        console.error(`Failed to fetch comments for answer ${value.$id}:`, err);
+        answerComments = { documents: [] };
+      }
+
+      let modifiedAnswerComments: ModifiedCommentDocument[] = [];
+      try {
+        modifiedAnswerComments = await Promise.all(
           answerComments.documents.map(async (comment) => {
-            const commentAuthor = await users.get<UserPrefs>(comment.authorId);
-            return {
-              ...comment,
-              author: {
-                $id: commentAuthor.$id,
-                name: commentAuthor.name,
-                reputation: commentAuthor.prefs.reputation,
-              },
-            };
+            try {
+              const commentAuthor = await users.get<UserPrefs>(
+                comment.authorId
+              );
+              return {
+                ...comment,
+                author: {
+                  $id: commentAuthor.$id,
+                  name: commentAuthor.name,
+                  reputation: commentAuthor.prefs.reputation,
+                },
+              };
+            } catch (err) {
+              console.error(
+                `Failed to fetch author for comment ${comment.$id}:`,
+                err
+              );
+              return {
+                ...comment,
+                author: {
+                  $id: "unknown",
+                  name: "Unknown User",
+                  reputation: 0,
+                },
+              };
+            }
           })
         );
+      } catch (err) {
+        console.error(
+          `Failed to process comments for answer ${value.$id}:`,
+          err
+        );
+      }
 
       return {
         ...value,
@@ -147,11 +264,16 @@ export default async function RenderQuestion({
           name: author.name,
           reputation: author.prefs.reputation,
         },
-        upvotes: upvotes.total,
-        downvotes: downvotes.total,
+        upvotes: upvotes.total ?? upvotes.documents.length,
+        downvotes: downvotes.total ?? downvotes.documents.length,
         comments: modifiedAnswerComments,
       };
     })
+  );
+
+  // ✅ Filter out nulls and assign to the correctly typed variable
+  const modifiedAnswers: ModifiedAnsDoc[] = modifiedAnswersRaw.filter(
+    (ans): ans is ModifiedAnsDoc => ans !== null
   );
 
   return (
@@ -221,20 +343,22 @@ export default async function RenderQuestion({
             {/* <VoteButtons/> */}
             {/* implement vote mechanism later */}
           </CardFooter>
+          <Comment
+            className="max-w-none"
+            comments={modifiedComments}
+            type="question"
+            typeId={questionId}
+          />
         </Card>
       </MagicCard>
       <div className="m-3">
         <h1 className="text-4xl font-bold m-3">Answers</h1>
         <div className="flex flex-col gap-3">
-          {modifiedAnswers.map((value, index) => {
-            return (
-              <AnswerCard
-                AnswerDetails={value}
-                ProfilePage={false}
-                key={index}
-              />
-            );
-          })}
+          <Answers
+            ProfilePage={false}
+            AnswerList={modifiedAnswers}
+            QuestionId={questionId}
+          />
         </div>
       </div>
     </div>

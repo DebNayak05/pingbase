@@ -7,6 +7,7 @@ import { CommentDocument } from "@/types/types";
 import { ID } from "appwrite";
 import { useState } from "react";
 import { ModifiedCommentDocument } from "../questionComponents/QuestionAnswerDisplay";
+import Link from "next/link";
 
 export default function Comment({
   comments,
@@ -42,12 +43,12 @@ export default function Comment({
       );
       const toAdd = {
         ...response,
-        author : {
-            $id : user.$id,
-            name : user.name,
-            reputation : user.prefs.reputation
-        }
-      }
+        author: {
+          $id: user.$id,
+          name: user.name,
+          reputation: user.prefs.reputation,
+        },
+      };
       setCommentsHere((prev) => [...prev, toAdd]);
       setNewComment("");
     } catch (error) {
@@ -62,7 +63,11 @@ export default function Comment({
             key={index}
             className="rounded-xl px-4 py-2 mx-3 text-sm text-white border border-white/10 bg-white/5 backdrop-blur-md"
           >
-            <div className="text-xs text-white/50 mb-1">{comment.author.name}</div>
+            <Link href={`/users/${comment.authorId}/${comment.author.name}`}>
+              <span className="text-xs text-white/50 mb-1">
+                {comment.author.name}
+              </span>
+            </Link>
             <div className="whitespace-pre-line">{comment.content}</div>
           </div>
         ))}
@@ -75,13 +80,13 @@ export default function Comment({
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
             placeholder="Write a comment..."
-            className="w-full resize-none rounded-xl px-4 py-2 text-white bg-black/30 border border-white/10 backdrop-blur-md placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-white/20"
+            className="rounded-xl px-4 mx-3 py-2 text-white bg-black/30 border border-white/10 backdrop-blur-md placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-white/20"
             rows={2}
           />
           <button
             onClick={handleSubmit}
             disabled={!newComment.trim()}
-            className="self-end bg-white/10 border border-white/20 text-white px-4 py-1.5 rounded-lg text-sm hover:bg-white/20 transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
+            className="mx-3 self-end bg-white/10 border border-white/20 text-white px-4 py-1.5 rounded-lg text-sm hover:bg-white/20 transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
           >
             Post
           </button>

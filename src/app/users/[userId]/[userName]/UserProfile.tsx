@@ -45,7 +45,6 @@ export default function UserProfile({
     };
     fetchData();
   }, []);
-  console.log(user);
   return (
     <div className="flex flex-col gap-3 items-center p-4">
       <Card className="min-w-2xl bg-gray-800 border-blue-300">
@@ -114,24 +113,6 @@ export default function UserProfile({
             }}
           >
             Answers
-          </MenubarTrigger>
-        </MenubarMenu>
-        <MenubarMenu>
-          <MenubarTrigger
-            onClick={() => {
-              router.push(`/users/${userId}/${userName}/comments`);
-            }}
-          >
-            Comments
-          </MenubarTrigger>
-        </MenubarMenu>
-        <MenubarMenu>
-          <MenubarTrigger
-            onClick={() => {
-              router.push(`/users/${userId}/${userName}/votes`);
-            }}
-          >
-            Votes
           </MenubarTrigger>
         </MenubarMenu>
       </Menubar>
