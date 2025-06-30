@@ -37,8 +37,6 @@ export default function QuestionForm({
       setFormData({ ...formData, authorId: user.$id });
     }
   }, [user]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
   const create = async () => {
     try {
       let storageResponse = null;
@@ -69,38 +67,38 @@ export default function QuestionForm({
     }
   };
 
-  const update = async () => {
-    if (!question) {
-      return "please provide previous question";
-    }
-    let storageResponse = null;
-    if (formData.attachment) {
-      if (question.attachmentId) {
-        await storage.deleteFile(
-          questionAttachmentBucket,
-          question.attachmentId
-        );
-      }
-      storageResponse = await storage.createFile(
-        questionAttachmentBucket,
-        ID.unique(),
-        formData.attachment
-      );
-    }
-    const response = await databases.updateDocument(
-      db,
-      questionCollection,
-      ID.unique(),
-      {
-        title: formData.title,
-        authorId: formData.authorId,
-        tags: Array.from(formData.tags),
-        attachmentId: storageResponse ? storageResponse.$id : null,
-        content: formData.content,
-      }
-    );
-    return response;
-  };
+  // const update = async () => {
+  //   if (!question) {
+  //     return "please provide previous question";
+  //   }
+  //   let storageResponse = null;
+  //   if (formData.attachment) {
+  //     if (question.attachmentId) {
+  //       await storage.deleteFile(
+  //         questionAttachmentBucket,
+  //         question.attachmentId
+  //       );
+  //     }
+  //     storageResponse = await storage.createFile(
+  //       questionAttachmentBucket,
+  //       ID.unique(),
+  //       formData.attachment
+  //     );
+  //   }
+  //   const response = await databases.updateDocument(
+  //     db,
+  //     questionCollection,
+  //     ID.unique(),
+  //     {
+  //       title: formData.title,
+  //       authorId: formData.authorId,
+  //       tags: Array.from(formData.tags),
+  //       attachmentId: storageResponse ? storageResponse.$id : null,
+  //       content: formData.content,
+  //     }
+  //   );
+  //   return response;
+  // };
 
   const onSubmit = async () => {
     console.log(formData);
@@ -110,12 +108,9 @@ export default function QuestionForm({
       !formData.authorId ||
       !formData.tags
     ) {
-      setError("Please fill out all fields");
       toast.error("Please fill out all fields");
       return;
     }
-    setLoading(true);
-    setError("");
     try {
       await create();
       setFormData({
@@ -130,16 +125,8 @@ export default function QuestionForm({
         fileInputRef.current.value = "";
       }
     } catch (error: unknown) {
-      if (error instanceof AppwriteException) {
-        setError(error.message);
-      } else if (error instanceof Error) {
-        setError(error.message);
-      } else {
-        setError("Something went wrong");
-      }
-    } finally {
-      setLoading(false);
-    }
+      console.error(error);
+    } 
   };
   return (
     <div className="flex flex-col gap-3 p-5">

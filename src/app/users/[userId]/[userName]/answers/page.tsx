@@ -4,7 +4,7 @@ import {
   ModifiedCommentDocument,
 } from "@/components/questionComponents/QuestionAnswerDisplay";
 import { databases } from "@/models/client/config";
-import { answerCollection, commentCollection, db } from "@/models/name";
+import { answerCollection, db } from "@/models/name";
 import { users } from "@/models/server/config";
 import { voteCollection } from "@/models/name";
 import {
@@ -27,7 +27,7 @@ export default async function ProfileAnswers({
   );
   const author = await users.get<UserPrefs>(userId);
   const modifiedAnswers: ModifiedAnsDoc[] = await Promise.all(
-    answers.documents.map(async (value, index) => {
+    answers.documents.map(async (value) => {
       const [upvotes, downvotes] = await Promise.all([
         databases.listDocuments<VoteDocument>(db, voteCollection, [
           Query.equal("typeId", value.$id),

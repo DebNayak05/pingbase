@@ -31,7 +31,6 @@ import {
 import { databases, users } from "@/models/server/config";
 import getRelativeTime from "@/lib/convertDateToRelativeTime";
 import { Query } from "node-appwrite";
-import AnswerCard from "../answerComponents/answerCard";
 import { MagicCard } from "../magicui/magic-card";
 import Answers from "../answerComponents/renderAnswers";
 
@@ -92,7 +91,7 @@ export default async function RenderQuestion({
     ]);
   //now i need the author and details of author of each comment and answer
   const modifiedComments: ModifiedCommentDocument[] = await Promise.all(
-    comments.documents.map(async (value, index) => {
+    comments.documents.map(async (value) => {
       const author = await users.get<UserPrefs>(value.authorId);
       return {
         ...value,

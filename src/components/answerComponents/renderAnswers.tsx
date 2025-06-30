@@ -13,7 +13,6 @@ import { ID } from "appwrite";
 import toast from "react-hot-toast";
 import { AnswerDocument } from "@/types/types";
 import { ShimmerButton } from "../magicui/shimmer-button";
-import { Input } from "../ui/input";
 import MDEditor from "@uiw/react-md-editor";
 
 export default function Answers({
