@@ -48,7 +48,7 @@ export default function UserProfile({
   }, []);
   return (
     <div className="flex flex-col gap-3 items-center p-4">
-      <Card className=" bg-gray-800 border-blue-300 w-8/12">
+      <Card className=" bg-gradient-to-bl from-gray-800 via-zinc-600 to-gray-800 border-blue-300 w-8/12">
         <CardHeader>
           <CardTitle className="text-5xl">
             {loading ? "Loading..." : user ? user.name : "server error"}

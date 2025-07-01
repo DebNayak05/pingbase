@@ -16,12 +16,12 @@ export default async function ProfileSummary({
   const answers = await databases.listDocuments<AnswerDocument>(
     db,
     answerCollection,
-    [Query.equal("authorId", userId), Query.limit(1)],
+    [Query.equal("authorId", userId), Query.limit(1)]
   );
   const questions = await databases.listDocuments<QuestionDocument>(
     db,
     questionCollection,
-    [Query.equal("authorId", userId), Query.limit(1)],
+    [Query.equal("authorId", userId), Query.limit(1)]
   );
   const user: number = (
     await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/getUser`, {
@@ -33,7 +33,7 @@ export default async function ProfileSummary({
       <div className="h-full group/card">
         <div
           className={cn(
-            " cursor-pointer overflow-hidden relative card  rounded-md shadow-xl  mx-auto backgroundImage flex flex-col justify-between p-4 bg-orange-500 text-center",
+            " cursor-pointer overflow-hidden relative card  rounded-md shadow-xl  mx-auto backgroundImage flex flex-col justify-between p-4 bg-radial from-orange-500 via-orange-700 to-orange-900 text-center"
           )}
         >
           <div className="absolute w-full h-full top-0 left-0 transition duration-300 group-hover/card:bg-black opacity-60"></div>
@@ -56,7 +56,7 @@ export default async function ProfileSummary({
       <div className="h-full group/card">
         <div
           className={cn(
-            " cursor-pointer overflow-hidden relative card  rounded-md shadow-xl  mx-auto backgroundImage flex flex-col justify-between p-4 bg-sky-500 text-center",
+            " cursor-pointer overflow-hidden relative card  rounded-md shadow-xl  mx-auto backgroundImage flex flex-col justify-between p-4 bg-radial from-sky-500 via-sky-700 to-sky-900 text-center"
           )}
         >
           <div className="absolute w-full h-full top-0 left-0 transition duration-300 group-hover/card:bg-black opacity-60"></div>
@@ -79,7 +79,7 @@ export default async function ProfileSummary({
       <div className="h-full group/card">
         <div
           className={cn(
-            " cursor-pointer overflow-hidden relative card  rounded-md shadow-xl  mx-auto backgroundImage flex flex-col justify-between p-4 bg-orange-500 text-center",
+            " cursor-pointer overflow-hidden relative card  rounded-md shadow-xl  mx-auto backgroundImage flex flex-col justify-between p-4 bg-radial from-orange-500 via-orange-700 to-orange-900 text-center"
           )}
         >
           <div className="absolute w-full h-full top-0 left-0 transition duration-300 group-hover/card:bg-black opacity-60"></div>

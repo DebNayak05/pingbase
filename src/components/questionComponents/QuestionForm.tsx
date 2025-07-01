@@ -11,7 +11,7 @@ import { databases, storage } from "@/models/client/config";
 import { useAuthStore } from "@/store/Auth";
 import { QuestionDocument } from "@/types/types";
 import MDEditor from "@uiw/react-md-editor";
-import { AppwriteException, ID } from "node-appwrite";
+import { ID } from "node-appwrite";
 import { useEffect, useState } from "react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";

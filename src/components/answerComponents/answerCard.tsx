@@ -3,7 +3,6 @@ import { MagicCard } from "../magicui/magic-card";
 import { ModifiedAnsDoc } from "../questionComponents/QuestionAnswerDisplay";
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
   CardHeader,
