@@ -7,11 +7,7 @@ import { databases } from "@/models/client/config";
 import { answerCollection, db } from "@/models/name";
 import { users } from "@/models/server/config";
 import { voteCollection } from "@/models/name";
-import {
-  AnswerDocument,
-  UserPrefs,
-  VoteDocument,
-} from "@/types/types";
+import { AnswerDocument, UserPrefs, VoteDocument } from "@/types/types";
 import { Query } from "node-appwrite";
 import Answers from "@/components/answerComponents/renderAnswers";
 export default async function ProfileAnswers({
@@ -55,5 +51,9 @@ export default async function ProfileAnswers({
       };
     })
   );
-  return <Answers className="min-w-5/12" ProfilePage={true} AnswerList={modifiedAnswers} />;
+  return (
+    <div className="w-full mx-auto">
+      <Answers className="" ProfilePage={true} AnswerList={modifiedAnswers} />
+    </div>
+  );
 }

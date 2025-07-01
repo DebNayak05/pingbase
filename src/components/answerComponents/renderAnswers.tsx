@@ -19,24 +19,13 @@ export default function Answers({
   AnswerList,
   ProfilePage,
   QuestionId,
-  className
+  className,
 }: {
   AnswerList: ModifiedAnsDoc[];
   ProfilePage: boolean;
   QuestionId?: string;
-  className ?: string
+  className?: string;
 }) {
-  if (ProfilePage) {
-    return (
-      <div className={`${className} flex flex-col gap-2`} >
-        {AnswerList.map((value, index) => {
-          return (
-            <AnswerCard className={className} AnswerDetails={value} ProfilePage={ProfilePage} key={index} />
-          );
-        })}
-      </div>
-    );
-  }
   const { user } = useAuthStore();
   const [answersHere, setAnswersHere] = useState(AnswerList);
   const [formData, setFormData] = useState({
@@ -86,37 +75,40 @@ export default function Answers({
     }
   };
   return (
-    <div className={`${className} space-y-8`}>
-      {user && <div className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-sm p-6">
-        <div className="mb-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-          <h2 className="text-3xl font-semibold text-gray-900 dark:text-white">
-            Add Your Answer
-          </h2>
-          <ShimmerButton
-            shimmerColor="#00f6ff"
-            shimmerSize="0.2em"
-            shimmerDuration="2.5s"
-            background="#6d3596"
-            onClick={() => onSubmit()}
-            className="w-fit self-end lg:self-auto"
-          >
-            <span className="text-sm lg:text-base font-medium text-white">
-              Publish Answer
-            </span>
-          </ShimmerButton>
+    <div className={`items-center space-y-8`}>
+      {user && !ProfilePage && (
+        <div className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-sm p-6">
+          <div className="mb-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            <h2 className="text-3xl font-semibold text-gray-900 dark:text-white">
+              Add Your Answer
+            </h2>
+            <ShimmerButton
+              shimmerColor="#00f6ff"
+              shimmerSize="0.2em"
+              shimmerDuration="2.5s"
+              background="#6d3596"
+              onClick={() => onSubmit()}
+              className="w-fit self-end lg:self-auto"
+            >
+              <span className="text-sm lg:text-base font-medium text-white">
+                Publish Answer
+              </span>
+            </ShimmerButton>
+          </div>
+          <div className="min-h-[200px] rounded-lg overflow-hidden border border-gray-300 dark:border-gray-700 bg-white dark:bg-black focus-within:ring-2 focus-within:ring-violet-400">
+            <MDEditor
+              value={formData.content}
+              onChange={(value) =>
+                setFormData({ ...formData, content: value ?? "" })
+              }
+            />
+          </div>
         </div>
-        <div className="min-h-[200px] rounded-lg overflow-hidden border border-gray-300 dark:border-gray-700 bg-white dark:bg-black focus-within:ring-2 focus-within:ring-violet-400">
-          <MDEditor
-            value={formData.content}
-            onChange={(value) =>
-              setFormData({ ...formData, content: value ?? "" })
-            }
-          />
-        </div>
-      </div>}
-      <div className="space-y-6">
+      )}
+      <div className="">
         {answersHere.map((value) => (
           <AnswerCard
+            className={`{${className}}`}
             AnswerDetails={value}
             ProfilePage={ProfilePage}
             key={value.$id}

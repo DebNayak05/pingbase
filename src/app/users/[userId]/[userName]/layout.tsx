@@ -4,5 +4,9 @@ export default function ProfilePage({
 }: {
   children: React.ReactNode;
 }) {
-  return <UserProfile>{children}</UserProfile>;
+  return (
+    <div className="items-center">
+      <UserProfile>{children}</UserProfile>
+    </div>
+  );
 }

@@ -17,11 +17,13 @@ import { MagicCard } from "../magicui/magic-card";
 
 export default function QuestionCard({
   questionData,
+  className
 }: {
   questionData: QuestionDocument;
+  className ?: string
 }) {
   return (
-    <Link href={`/questions/${questionData.$id}`}>
+    <Link href={`/questions/${questionData.$id}`} className={className}>
       <MagicCard
         gradientColor="#1e2939"
         className="bg-gray-900 border-2 rounded-2xl"

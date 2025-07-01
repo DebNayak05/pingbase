@@ -47,7 +47,7 @@ export default function UserProfile({
   }, []);
   return (
     <div className="flex flex-col gap-3 items-center p-4">
-      <Card className="min-w-2xl bg-gray-800 border-blue-300">
+      <Card className=" bg-gray-800 border-blue-300 w-8/12">
         <CardHeader>
           <CardTitle className="text-5xl">
             {loading ? "Loading..." : user ? user.name : "server error"}
@@ -87,7 +87,7 @@ export default function UserProfile({
           </p>
         </CardFooter>
       </Card>
-      <Menubar className=" border-blue-300 min-w-2xl bg-gray-950 flex flex-row justify-around">
+      <Menubar className=" border-blue-300 bg-gray-950 flex flex-row justify-around w-8/12">
         <MenubarMenu>
           <MenubarTrigger
             onClick={() => {
@@ -116,7 +116,7 @@ export default function UserProfile({
           </MenubarTrigger>
         </MenubarMenu>
       </Menubar>
-      <div>{children}</div>
+      <div className="w-8/12">{children}</div>
     </div>
   );
 }

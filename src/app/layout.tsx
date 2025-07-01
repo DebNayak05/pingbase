@@ -29,9 +29,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased dark bg-gray-900`}
       >
-        <Header/>
+        <Header />
         <Toaster />
-        <div className="flex-grow pt-28 min-h-screen">
+        <div className="flex-grow pt-28 min-h-screen items-center">
           {children}
         </div>
         <Footer />
