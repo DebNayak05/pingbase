@@ -17,10 +17,10 @@ import { MagicCard } from "../magicui/magic-card";
 
 export default function QuestionCard({
   questionData,
-  className
+  className,
 }: {
   questionData: QuestionDocument;
-  className ?: string
+  className?: string;
 }) {
   return (
     <Link href={`/questions/${questionData.$id}`} className={className}>
@@ -36,7 +36,6 @@ export default function QuestionCard({
           <CardHeader>
             <div className="flex flex-col gap-1">
               <CardTitle className="text-2xl">{questionData.title}</CardTitle>
-
               <CardDescription className="flex flex-row gap-2">
                 {Array.from(questionData.tags).map((value, index) => {
                   return (
@@ -58,7 +57,7 @@ export default function QuestionCard({
                   height={96}
                   src={storage.getFileView(
                     questionAttachmentBucket,
-                    questionData.attachmentId
+                    questionData.attachmentId,
                   )}
                   alt="Uploaded Image"
                 />

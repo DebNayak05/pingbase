@@ -45,65 +45,67 @@ export async function POST(request: NextRequest) {
             ]
             }
          */
-
+    let karmaDelta = 0,
+      repDelta = 0;
     if (response.total !== 0) {
-      await databases.deleteDocument(
-        db,
-        voteCollection,
-        response.documents[0].$id
-      );
-      const wasUpvotedBefore: boolean =
-        response.documents[0].voteStatus === "upvoted";
-      const questionOrAnswer = (await databases.getDocument(
-        db,
-        isQuestion ? questionCollection : answerCollection,
-        typeId
-      )) as AnswerDocument | QuestionDocument;
-      await databases.updateDocument(
-        db,
-        isQuestion ? questionCollection : answerCollection,
-        typeId,
-        {
-          karma: Number(questionOrAnswer.karma) + (wasUpvotedBefore ? -1 : 1),
-        }
-      );
-      const authorPrefs = await users.getPrefs<UserPrefs>(
-        questionOrAnswer.authorId
-      );
-      await users.updatePrefs(questionOrAnswer.authorId, {
-        reputation:
-          Number(authorPrefs.reputation) + (wasUpvotedBefore ? -1 : 1),
-      });
+      const prevVote = response.documents[0];
+      const wasUpvoted: boolean = prevVote.voteStatus === "upvoted";
+      await databases.deleteDocument(db, voteCollection, prevVote.$id);
+      if (wasUpvoted) {
+        karmaDelta--;
+        repDelta--;
+      } else {
+        karmaDelta++;
+        repDelta++;
+      }
     }
+
+    if (voteStatus === "upvoted") {
+      karmaDelta++;
+      repDelta++;
+    } else {
+      karmaDelta--;
+      repDelta--;
+    }
+
     const curQuestionOrAnswer = (await databases.getDocument(
       db,
       isQuestion ? questionCollection : answerCollection,
-      typeId
+      typeId,
     )) as AnswerDocument | QuestionDocument;
-    const curUpvoted: boolean = voteStatus === "upvoted";
+
     await databases.updateDocument(
       db,
       isQuestion ? questionCollection : answerCollection,
       typeId,
-      { karma: Number(curQuestionOrAnswer.karma) + (curUpvoted ? +1 : -1) }
+      {
+        karma: Number(curQuestionOrAnswer.karma) + karmaDelta,
+      },
     );
+
     const authorPrefs = await users.getPrefs<UserPrefs>(
-      curQuestionOrAnswer.authorId
+      curQuestionOrAnswer.authorId,
     );
     await users.updatePrefs(curQuestionOrAnswer.authorId, {
-      reputation: Number(authorPrefs.reputation) + (curUpvoted ? +1 : -1),
+      reputation: Number(authorPrefs.reputation) + repDelta,
     });
-    await databases.createDocument(db, voteCollection, ID.unique(), {
-      typeId: typeId,
-      voteStatus: voteStatus,
-      type: type,
-      votedById: votedById,
-    });
+    const voteResponse = await databases.createDocument<VoteDocument>(
+      db,
+      voteCollection,
+      ID.unique(),
+      {
+        typeId: typeId,
+        voteStatus: voteStatus,
+        type: type,
+        votedById: votedById,
+      },
+    );
     return NextResponse.json(
       {
         message: `Post ${type === "upvoted" ? "upvoted" : "downvoted"} successfully`,
+        voteResponse: voteResponse,
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error: unknown) {
     return handleApiErrors(error);

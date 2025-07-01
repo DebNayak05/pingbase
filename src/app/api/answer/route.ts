@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
       content: answer,
       authorId: authorId,
       questionId: questionId,
-      karma : 0
+      karma: 0,
     });
     // const prefs = await users.getPrefs<UserPrefs>(authorId);
     // await users.updatePrefs(authorId, {

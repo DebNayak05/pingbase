@@ -14,8 +14,11 @@ const nextConfig: NextConfig = {
     //     search: "",
     //   },
     // ],
-        remotePatterns: [new URL(`${process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT}/storage/buckets/${questionAttachmentBucket}/files/**/view?project=${process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID}`)],
-
+    remotePatterns: [
+      new URL(
+        `${process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT}/storage/buckets/${questionAttachmentBucket}/files/**/view?project=${process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID}`,
+      ),
+    ],
   },
 };
 

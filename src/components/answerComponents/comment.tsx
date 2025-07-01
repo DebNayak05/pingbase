@@ -39,7 +39,7 @@ export default function Comment({
           type: type,
           typeId: typeId,
           karma: 0,
-        }
+        },
       );
       const toAdd = {
         ...response,

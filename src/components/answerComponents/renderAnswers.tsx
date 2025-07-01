@@ -50,7 +50,7 @@ export default function Answers({
           content: formData.content,
           questionId: QuestionId,
           karma: 0,
-        }
+        },
       );
       const toAdd = {
         ...response,

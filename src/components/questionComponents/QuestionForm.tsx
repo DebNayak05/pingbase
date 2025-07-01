@@ -44,7 +44,7 @@ export default function QuestionForm({
         storageResponse = await storage.createFile(
           questionAttachmentBucket,
           ID.unique(),
-          formData.attachment
+          formData.attachment,
         );
       }
       const response = await databases.createDocument(
@@ -58,7 +58,7 @@ export default function QuestionForm({
           attachmentId: storageResponse ? storageResponse.$id : null,
           content: formData.content,
           karma: 0,
-        }
+        },
       );
       toast.success("Question uploaded successfully!");
       return response;
@@ -126,7 +126,7 @@ export default function QuestionForm({
       }
     } catch (error: unknown) {
       console.error(error);
-    } 
+    }
   };
   return (
     <div className="flex flex-col gap-3 p-5">
@@ -200,7 +200,7 @@ export default function QuestionForm({
               <button
                 onClick={() => {
                   const newSet = Array.from(formData.tags).filter(
-                    (item) => item !== value
+                    (item) => item !== value,
                   );
                   setFormData({ ...formData, tags: new Set(newSet) });
                 }}

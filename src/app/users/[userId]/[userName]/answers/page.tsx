@@ -19,7 +19,7 @@ export default async function ProfileAnswers({
   const answers = await databases.listDocuments<AnswerDocument>(
     db,
     answerCollection,
-    [Query.equal("authorId", userId)]
+    [Query.equal("authorId", userId)],
   );
   const author = await users.get<UserPrefs>(userId);
   const modifiedAnswers: ModifiedAnsDoc[] = await Promise.all(
@@ -49,7 +49,7 @@ export default async function ProfileAnswers({
         downvotes: downvotes.total,
         comments: [] as ModifiedCommentDocument[],
       };
-    })
+    }),
   );
   return (
     <div className="w-full mx-auto">

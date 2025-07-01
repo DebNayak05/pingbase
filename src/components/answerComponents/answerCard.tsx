@@ -12,6 +12,7 @@ import {
 import Markdown from "react-markdown";
 import Link from "next/link";
 import Comment from "./comment";
+import VoteButtons from "../commonComponents/VoteButtons";
 
 export default function AnswerCard({
   AnswerDetails,
@@ -49,13 +50,24 @@ export default function AnswerCard({
                 className="text-sm font-light"
                 href={`/questions/${AnswerDetails.questionId}`}
               >
-                <CardDescription className="text-blue-600 underline">Question Link</CardDescription>
+                <CardDescription className="text-blue-600 underline">
+                  Question Link
+                </CardDescription>
               </Link>
             )}
           </CardHeader>
           <CardContent className="prose prose-invert m-3 p-4 max-w-none border-white/20 border-2 text-white rounded-2xl backdrop-blur-2xl bg-black/10">
             <Markdown>{AnswerDetails.content}</Markdown>
           </CardContent>
+          {!ProfilePage && (
+            <VoteButtons
+              type={"answer"}
+              id={AnswerDetails.$id}
+              upvotes={AnswerDetails.upvotes}
+              downvotes={AnswerDetails.downvotes}
+              className={"w-fit mx-3"}
+            />
+          )}
           {!ProfilePage && (
             <Comment
               comments={AnswerDetails.comments}

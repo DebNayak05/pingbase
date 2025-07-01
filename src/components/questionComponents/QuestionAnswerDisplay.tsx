@@ -33,6 +33,7 @@ import getRelativeTime from "@/lib/convertDateToRelativeTime";
 import { Query } from "node-appwrite";
 import { MagicCard } from "../magicui/magic-card";
 import Answers from "../answerComponents/renderAnswers";
+import Link from "next/link";
 
 export interface ModifiedCommentDocument extends CommentDocument {
   author: {
@@ -65,7 +66,7 @@ export default async function RenderQuestion({
       databases.getDocument<QuestionDocument>(
         db,
         questionCollection,
-        questionId
+        questionId,
       ),
       databases.listDocuments<AnswerDocument>(db, answerCollection, [
         Query.orderAsc("$createdAt"),
@@ -89,6 +90,9 @@ export default async function RenderQuestion({
         Query.orderAsc("$createdAt"),
       ]),
     ]);
+  const questionAuthor: string = (
+    await users.get<UserPrefs>(questionData.authorId)
+  ).name;
   //now i need the author and details of author of each comment and answer
   const modifiedComments: ModifiedCommentDocument[] = await Promise.all(
     comments.documents.map(async (value) => {
@@ -101,7 +105,7 @@ export default async function RenderQuestion({
           reputation: author.prefs.reputation,
         },
       };
-    })
+    }),
   );
   // const modifiedAnswers: ModifiedAnsDoc[] = await Promise.all(
   //   answerData.documents.map(async (value) => {
@@ -176,7 +180,7 @@ export default async function RenderQuestion({
             Query.equal("type", "answer"),
             Query.equal("voteStatus", "upvoted"),
             Query.limit(1),
-          ]
+          ],
         );
       } catch (err) {
         console.error(`Failed to fetch upvotes for answer ${value.$id}:`, err);
@@ -192,12 +196,12 @@ export default async function RenderQuestion({
             Query.equal("type", "answer"),
             Query.equal("voteStatus", "downvoted"),
             Query.limit(1),
-          ]
+          ],
         );
       } catch (err) {
         console.error(
           `Failed to fetch downvotes for answer ${value.$id}:`,
-          err
+          err,
         );
         downvotes = { total: 0, documents: [] };
       }
@@ -210,7 +214,7 @@ export default async function RenderQuestion({
             Query.equal("typeId", value.$id),
             Query.equal("type", "answer"),
             Query.orderAsc("$createdAt"),
-          ]
+          ],
         );
       } catch (err) {
         console.error(`Failed to fetch comments for answer ${value.$id}:`, err);
@@ -223,7 +227,7 @@ export default async function RenderQuestion({
           answerComments.documents.map(async (comment) => {
             try {
               const commentAuthor = await users.get<UserPrefs>(
-                comment.authorId
+                comment.authorId,
               );
               return {
                 ...comment,
@@ -236,7 +240,7 @@ export default async function RenderQuestion({
             } catch (err) {
               console.error(
                 `Failed to fetch author for comment ${comment.$id}:`,
-                err
+                err,
               );
               return {
                 ...comment,
@@ -247,12 +251,12 @@ export default async function RenderQuestion({
                 },
               };
             }
-          })
+          }),
         );
       } catch (err) {
         console.error(
           `Failed to process comments for answer ${value.$id}:`,
-          err
+          err,
         );
       }
 
@@ -267,12 +271,12 @@ export default async function RenderQuestion({
         downvotes: downvotes.total ?? downvotes.documents.length,
         comments: modifiedAnswerComments,
       };
-    })
+    }),
   );
 
   // ✅ Filter out nulls and assign to the correctly typed variable
   const modifiedAnswers: ModifiedAnsDoc[] = modifiedAnswersRaw.filter(
-    (ans): ans is ModifiedAnsDoc => ans !== null
+    (ans): ans is ModifiedAnsDoc => ans !== null,
   );
 
   return (
@@ -300,6 +304,14 @@ export default async function RenderQuestion({
                     </div>
                   );
                 })}
+              </CardDescription>
+              <CardDescription>
+                Posted by:{" "}
+                <Link
+                  href={`/users/${questionData.authorId}/${questionAuthor}`}
+                >
+                  <span className="font-bold text-md">{questionAuthor}</span>
+                </Link>
               </CardDescription>
               <CardDescription className="text-sm font-light">
                 Post Created :{" "}
@@ -332,14 +344,20 @@ export default async function RenderQuestion({
                 height={400}
                 src={storage.getFileView(
                   questionAttachmentBucket,
-                  questionData.attachmentId
+                  questionData.attachmentId,
                 )}
                 alt="Uploaded Image"
               />
             </CardContent>
           )}
           <CardFooter className="mt-4">
-            {/* <VoteButtons/> */}
+            <VoteButtons
+              type={"question"}
+              id={questionData.$id}
+              upvotes={upvotes.total}
+              downvotes={downvotes.total}
+              className={""}
+            />
             {/* implement vote mechanism later */}
           </CardFooter>
           <Comment

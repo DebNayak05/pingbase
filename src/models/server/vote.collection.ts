@@ -17,7 +17,7 @@ export default async function createVoteCollection() {
       voteCollection,
       "type",
       ["question", "answer"],
-      true
+      true,
     ),
     databases.createStringAttribute(db, voteCollection, "typeId", 50, true), //type id is id of the unique question/answer id whose content is being judged
     databases.createStringAttribute(db, voteCollection, "votedById", 50, true),
@@ -26,7 +26,7 @@ export default async function createVoteCollection() {
       voteCollection,
       "voteStatus",
       ["upvoted", "downvoted"],
-      true
+      true,
     ),
   ]);
   console.log("Vote attributes created!!");

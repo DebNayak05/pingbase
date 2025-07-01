@@ -28,6 +28,7 @@ export default function UserProfile({
   const params = useParams<{ userId: string; userName: string }>();
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<UserDetails>();
+  const [selected, setSelected] = useState<string>("summary");
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -90,7 +91,9 @@ export default function UserProfile({
       <Menubar className=" border-blue-300 bg-gray-950 flex flex-row justify-around w-8/12">
         <MenubarMenu>
           <MenubarTrigger
+            className={`${selected === "summary" ? "bg-accent" : ""}`}
             onClick={() => {
+              setSelected("summary");
               router.push(`/users/${userId}/${userName}`);
             }}
           >
@@ -99,7 +102,9 @@ export default function UserProfile({
         </MenubarMenu>
         <MenubarMenu>
           <MenubarTrigger
+            className={`${selected === "questions" ? "bg-accent" : ""}`}
             onClick={() => {
+              setSelected("questions");
               router.push(`/users/${userId}/${userName}/questions`);
             }}
           >
@@ -108,7 +113,9 @@ export default function UserProfile({
         </MenubarMenu>
         <MenubarMenu>
           <MenubarTrigger
+            className={`${selected === "answers" ? "bg-accent" : ""}`}
             onClick={() => {
+              setSelected("answers");
               router.push(`/users/${userId}/${userName}/answers`);
             }}
           >
