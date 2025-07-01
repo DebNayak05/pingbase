@@ -33,7 +33,6 @@ export default function VoteButtons({
   useEffect(() => {
     const fetchUserData = async () => {
       if (!user) {
-        console.log("hello");
         return;
       }
       const response = await databases.listDocuments<VoteDocument>(
@@ -45,7 +44,6 @@ export default function VoteButtons({
           Query.equal("votedById", user.$id),
         ],
       );
-      console.log(response);
       setVotedDocument(response.documents[0] || null);
       if (response.documents[0]) {
         setCurVote(response.documents[0].voteStatus);

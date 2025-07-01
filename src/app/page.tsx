@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import { FaGithub } from "react-icons/fa";
 
 export default function LandingPage() {
@@ -62,11 +63,11 @@ export default function LandingPage() {
             Curious minds are waiting. Dive into the latest discussions, find
             answers, or ask your own.
           </p>
-          <a href="/questions">
+          <Link href="/questions">
             <Button className="text-lg px-8 py-4 rounded-2xl bg-cyan-600 hover:bg-cyan-700 shadow-lg transition-all duration-200">
               Browse Questions
             </Button>
-          </a>
+          </Link>
         </div>
       </section>
     </main>

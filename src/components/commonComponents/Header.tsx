@@ -20,5 +20,10 @@ export default function Header() {
       link: `/users/${user.$id}/${slugify(user.name)}`,
     });
   }
-  return <FloatingNav navItems={navItems} className="bg-gradient-to-br from-gray-900 via-zinc-800 to-gray-900" />;
+  return (
+    <FloatingNav
+      navItems={navItems}
+      className="bg-gradient-to-br from-gray-900 via-zinc-800 to-gray-900"
+    />
+  );
 }

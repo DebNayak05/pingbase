@@ -101,7 +101,6 @@ export default function QuestionForm({
   // };
 
   const onSubmit = async () => {
-    console.log(formData);
     if (
       !formData.title ||
       !formData.content ||

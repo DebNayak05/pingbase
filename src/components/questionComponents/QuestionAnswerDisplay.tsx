@@ -167,7 +167,7 @@ export default async function RenderQuestion({
       try {
         author = await users.get<UserPrefs>(value.authorId);
       } catch (err) {
-        console.error(`Failed to fetch author for answer ${value.$id}:`, err);
+        console.error(`Failed to fetch author :`, err);
         return null;
       }
 
@@ -183,7 +183,7 @@ export default async function RenderQuestion({
           ],
         );
       } catch (err) {
-        console.error(`Failed to fetch upvotes for answer ${value.$id}:`, err);
+        console.error(`Failed to fetch upvotes:`, err);
         upvotes = { total: 0, documents: [] };
       }
 
@@ -200,7 +200,7 @@ export default async function RenderQuestion({
         );
       } catch (err) {
         console.error(
-          `Failed to fetch downvotes for answer ${value.$id}:`,
+          `Failed to fetch downvotes`,
           err,
         );
         downvotes = { total: 0, documents: [] };
@@ -217,7 +217,7 @@ export default async function RenderQuestion({
           ],
         );
       } catch (err) {
-        console.error(`Failed to fetch comments for answer ${value.$id}:`, err);
+        console.error(`Failed to fetch comments:`, err);
         answerComments = { documents: [] };
       }
 
@@ -239,7 +239,7 @@ export default async function RenderQuestion({
               };
             } catch (err) {
               console.error(
-                `Failed to fetch author for comment ${comment.$id}:`,
+                `Failed to fetch author:`,
                 err,
               );
               return {
@@ -255,7 +255,7 @@ export default async function RenderQuestion({
         );
       } catch (err) {
         console.error(
-          `Failed to process comments for answer ${value.$id}:`,
+          `Failed to process :`,
           err,
         );
       }
