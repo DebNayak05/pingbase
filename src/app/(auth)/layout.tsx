@@ -7,7 +7,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   useEffect(() => {
     if (session) {
-      router.push("/");
+      router.push("/questions");
     }
   }, [session]);
 

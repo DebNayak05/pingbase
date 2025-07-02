@@ -15,9 +15,11 @@ export default function LandingPage() {
           engage through comments and voting.
         </p>
         <div className="flex gap-6">
-          <Button className="text-lg px-8 py-4 rounded-2xl bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-800/40 transition-all duration-200">
-            Login / Register
-          </Button>
+          <Link href={"/login"}>
+            <Button className="text-lg px-8 py-4 rounded-2xl bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-800/40 transition-all duration-200 cursor-pointer">
+              Login / Register
+            </Button>
+          </Link>
           <a
             href="https://github.com/DebNayak05/pingbase"
             target="_blank"
@@ -25,7 +27,7 @@ export default function LandingPage() {
           >
             <Button
               variant="outline"
-              className="text-lg px-8 py-4 rounded-2xl border-zinc-600 text-zinc-300 hover:bg-zinc-800 transition-all duration-200"
+              className="cursor-pointer text-lg px-8 py-4 rounded-2xl border-zinc-600 text-zinc-300 hover:bg-zinc-800 transition-all duration-200"
             >
               <FaGithub className="mr-2" /> View on GitHub
             </Button>

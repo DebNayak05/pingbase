@@ -42,7 +42,7 @@ export default async function ProfileSummary({
               Karma
             </h1>
             <p className="font-normal text-sm text-gray-50 relative z-10 mt-4">
-              This user has accumated
+              This user has accumulated
             </p>
             <p className="font-bold text-2xl text-center relative z-10">
               {user}
