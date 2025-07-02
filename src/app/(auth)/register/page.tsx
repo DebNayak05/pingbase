@@ -116,7 +116,7 @@ export default function Register() {
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="lastname">First Name</Label>
+                <Label htmlFor="lastname">Last Name</Label>
                 <Input
                   id="lastname"
                   type="text"

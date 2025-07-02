@@ -93,7 +93,6 @@ export default async function RenderQuestion({
   const questionAuthor: string = (
     await users.get<UserPrefs>(questionData.authorId)
   ).name;
-  //now i need the author and details of author of each comment and answer
   const modifiedComments: ModifiedCommentDocument[] = await Promise.all(
     comments.documents.map(async (value) => {
       const author = await users.get<UserPrefs>(value.authorId);
@@ -107,59 +106,6 @@ export default async function RenderQuestion({
       };
     }),
   );
-  // const modifiedAnswers: ModifiedAnsDoc[] = await Promise.all(
-  //   answerData.documents.map(async (value) => {
-  //     const [author, upvotes, downvotes, answerComments] = await Promise.all([
-  //       users.get<UserPrefs>(value.authorId),
-  //       databases.listDocuments<VoteDocument>(db, voteCollection, [
-  //         Query.equal("typeId", value.$id),
-  //         Query.equal("type", "question"), // probably should be "answer"
-  //         Query.equal("voteStatus", "upvoted"),
-  //         Query.limit(1),
-  //       ]),
-  //       databases.listDocuments<VoteDocument>(db, voteCollection, [
-  //         Query.equal("typeId", value.$id),
-  //         Query.equal("type", "question"), // probably should be "answer"
-  //         Query.equal("voteStatus", "downvoted"),
-  //         Query.limit(1),
-  //       ]),
-  //       databases.listDocuments<CommentDocument>(db, commentCollection, [
-  //         Query.equal("typeId", value.$id),
-  //         Query.equal("type", "answer"),
-  //         Query.orderAsc("$createdAt"),
-  //       ]),
-  //     ]);
-
-  //     const modifiedAnswerComments: ModifiedCommentDocument[] =
-  //       await Promise.all(
-  //         answerComments.documents.map(async (comment) => {
-  //           const commentAuthor = await users.get<UserPrefs>(comment.authorId);
-  //           return {
-  //             ...comment,
-  //             author: {
-  //               $id: commentAuthor.$id,
-  //               name: commentAuthor.name,
-  //               reputation: commentAuthor.prefs.reputation,
-  //             },
-  //           };
-  //         })
-  //       );
-
-  //     return {
-  //       ...value,
-  //       author: {
-  //         $id: author.$id,
-  //         name: author.name,
-  //         reputation: author.prefs.reputation,
-  //       },
-  //       upvotes: upvotes.total,
-  //       downvotes: downvotes.total,
-  //       comments: modifiedAnswerComments,
-  //     };
-  //   })
-  // );
-
-  //GPT SOLUTION IDK WHY ABOVE CODE FAILS. BUT IF WRAPPING EVERYTHING INSIDE TRYCATCH IT WORKS
   const modifiedAnswersRaw: (ModifiedAnsDoc | null)[] = await Promise.all(
     answerData.documents.map(async (value) => {
       let author, upvotes, downvotes, answerComments;
@@ -273,14 +219,12 @@ export default async function RenderQuestion({
       };
     }),
   );
-
-  // ✅ Filter out nulls and assign to the correctly typed variable
   const modifiedAnswers: ModifiedAnsDoc[] = modifiedAnswersRaw.filter(
     (ans): ans is ModifiedAnsDoc => ans !== null,
   );
 
   return (
-    <div className={`${className} max-w-6/12`}>
+    <div className={`${className} max-w-6/12 min-w-4/12`}>
       <MagicCard
         gradientColor="#1e2939"
         className="bg-gray-900 border-2 rounded-2xl"
@@ -318,20 +262,6 @@ export default async function RenderQuestion({
                 {getRelativeTime(new Date(questionData.$createdAt))}
               </CardDescription>
             </div>
-            {/* <CardAction>
-            {questionData.attachmentId ? (
-              <Image
-                className="object-cover"
-                width={96}
-                height={96}
-                src={storage.getFileView(
-                  questionAttachmentBucket,
-                  questionData.attachmentId
-                )}
-                alt="Uploaded Image"
-              />
-            ) : null}
-          </CardAction> */}
           </CardHeader>
           <CardContent className="prose prose-invert m-3 p-2 border-white/20 border-2 text-white text-justify max-w-none rounded-2xl backdrop-blur-2xl bg-black/10 ">
             <Markdown>{questionData.content}</Markdown>
@@ -358,7 +288,6 @@ export default async function RenderQuestion({
               downvotes={downvotes.total}
               className={""}
             />
-            {/* implement vote mechanism later */}
           </CardFooter>
           <Comment
             className="max-w-none"
